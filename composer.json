@@ -1,0 +1,28 @@
+{
+    "name": "mediumart/notifier",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "notification", "channel"],
+    "authors": [
+        {
+            "name": "Isaac Esso",
+            "email": "daprod2009@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "orchestra/testbench": "~3.4",
+        "phpunit/phpunit": "^5.7",
+        "mockery/mockery": "^0.9.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mediumart\\Notifier\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}

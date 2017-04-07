@@ -2,6 +2,7 @@
 
 namespace Mediumart\Notifier;
 
+use RuntimeException;
 use ReflectionProperty;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Notifications\Factory as FactoryContract;
@@ -14,7 +15,12 @@ class NotifierServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    private $notificationsChannelsProperty ='notificationsChannels';
+    protected $notificationsChannelsProperty ='notificationsChannels';
+
+    /**
+     * @var string
+     */
+    protected $providerName;
 
     /**
      * Boot the application services.
@@ -53,7 +59,8 @@ class NotifierServiceProvider extends ServiceProvider
      */
     public function registerNotificationsChannels()
     {
-        if (! is_array($channels = $this->getNotificationsChannels())) {
+        if (! is_array($channels = $this->getNotificationsChannels())
+            || empty($channels)) {
             return;
         }
 
@@ -70,27 +77,43 @@ class NotifierServiceProvider extends ServiceProvider
      * Get list of declared channels.
      *
      * @return null|array
+     * @throws RuntimeException
      */
-    private function getNotificationsChannels()
+    public function getNotificationsChannels()
     {
-        $provider = $this->getProviderClassName();
+        if (property_exists($this, $this->notificationsChannelsProperty)) {
+            return $this->{$this->notificationsChannelsProperty};
+        }
 
-        if (! property_exists($provider, $this->notificationsChannelsProperty) ||
-            ! (new ReflectionProperty($provider, $this->notificationsChannelsProperty))->isPublic()) {
+        $provider = $this->getProviderName();
+
+        if (! property_exists($provider, $this->notificationsChannelsProperty)) {
             return null;
         }
 
-        return $this->getProvider()->{$this->notificationsChannelsProperty};
+        if (! (new ReflectionProperty($provider, $this->notificationsChannelsProperty))->isPublic()) {
+            throw new RuntimeException(
+                sprintf("The visibility of property [%s] in class [%s] should be 'public'",
+                    $this->notificationsChannelsProperty,
+                    $provider
+                )
+            );
+        }
+
+        return $this->getProvider($provider)->{$this->notificationsChannelsProperty};
     }
 
     /**
      * Get the channels provider.
      *
+     * @param  string  $name
      * @return \Illuminate\Support\ServiceProvider|null
      */
-    protected function getProvider()
+    protected function getProvider($name = null)
     {
-        return $this->app->getProvider($this->getProviderClassName());
+        $name = $name ?: $this->getProviderName();
+
+        return $this->app->getProvider($name);
     }
 
     /**
@@ -98,7 +121,31 @@ class NotifierServiceProvider extends ServiceProvider
      *
      * @return string
      */
-    protected function getProviderClassName()
+    public function getProviderName()
+    {
+        if (! $this->providerName) {
+            return $this->providerName = $this->defaultProviderName();
+        }
+
+        return $this->providerName;
+    }
+
+    /**
+     * Set teh channels provider name.
+     *
+     * @param $name
+     */
+    public function setProviderName($name)
+    {
+        $this->providerName = $name;
+    }
+
+    /**
+     * Get default channels provider name.
+     *
+     * @return string
+     */
+    public function defaultProviderName()
     {
         return $this->app->getNamespace().'Providers\AppServiceProvider';
     }

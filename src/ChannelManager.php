@@ -22,18 +22,14 @@ class ChannelManager extends Manager
      *
      * @param  string $channel
      * @return void
-     * @throws \InvalidArgumentException
      */
     public function register($channel)
     {
-        if (! (new ReflectionClass($channel))->implementsInterface(Factory::class)) {
-            throw new InvalidArgumentException(sprintf(
-                "class [$channel] is not a valid implementation of '%s' interface.",
-                Factory::class
-            ));
-        }
+        $this->throwExceptionIfChannelNotValid($channel);
 
-        $this->channels[] = $channel;
+        if (array_search($channel = ltrim($channel, '\\'), $this->channels) === false) {
+            $this->channels[] = $channel;
+        }
     }
 
     /**
@@ -91,5 +87,21 @@ class ChannelManager extends Manager
     public function getChannels()
     {
         return $this->channels;
+    }
+
+    /**
+     * Invalid channel handler.
+     *
+     * @param $channel
+     * throws InvalidArgumentException
+     */
+    protected function throwExceptionIfChannelNotValid($channel)
+    {
+        if (!(new ReflectionClass($channel))->implementsInterface(Factory::class)) {
+            throw new InvalidArgumentException(sprintf(
+                "class [$channel] is not a valid implementation of '%s' interface.",
+                Factory::class
+            ));
+        }
     }
 }

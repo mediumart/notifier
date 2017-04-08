@@ -25,7 +25,7 @@ class ChannelManager extends Manager
      */
     public function register($channel)
     {
-        $this->throwExceptionIfChannelNotValid($channel);
+        $this->throwExceptionIfChannelNotAValidFactory($channel);
 
         if (array_search($channel = ltrim($channel, '\\'), $this->channels) === false) {
             $this->channels[] = $channel;
@@ -62,7 +62,7 @@ class ChannelManager extends Manager
     }
 
     /**
-     * Create a new driver instance.
+     * Create a new channel driver.
      *
      * @param  $driver
      * @return null|\Mediumart\Notifier\Contracts\Channels\Dispatcher
@@ -95,7 +95,7 @@ class ChannelManager extends Manager
      * @param $channel
      * throws InvalidArgumentException
      */
-    protected function throwExceptionIfChannelNotValid($channel)
+    protected function throwExceptionIfChannelNotAValidFactory($channel)
     {
         if (!(new ReflectionClass($channel))->implementsInterface(Factory::class)) {
             throw new InvalidArgumentException(sprintf(

@@ -8,50 +8,41 @@ use Mediumart\Notifier\ChannelManager;
 
 class NotificationChannelManagerTest extends TestCase
 {
-    public function tearDown()
-    {
-        Mockery::close();
-    }
-
-    public function testChannelManagerRegisterChannelFactory()
+    public function test_channel_manager_register_channel_factory()
     {
         $manager = new ChannelManager(null);
-        $manager->register(NotificationChannelManagerTestNotificationChannelFactory::class);
-
-        $this->assertSame([NotificationChannelManagerTestNotificationChannelFactory::class], $manager->getChannels());
+        $manager->register(NotificationChannelManagerTest_Factory::class);
+        $this->assertSame([NotificationChannelManagerTest_Factory::class], $manager->getChannels());
     }
 
-    public function testChannelManagerRegisterChannelFactoryNotGiven()
+    public function test_channel_manager_register_channel_factory_not_given()
     {
         $manager = new ChannelManager(null);
-
         $this->expectException(\InvalidArgumentException::class);
-        $manager->register(NotificationChannelManagerTestNotFactory::class);
+        $manager->register(NotificationChannelManagerTest_NotFactory::class);
     }
 
-    public function testChannelManagerDriverMethodReturnsChannelDispatcherInstance()
+    public function test_channel_manager_driver_method_returns_channel_dispatcher_instance()
     {
         $manager = new ChannelManager(null);
-        $manager->register(NotificationChannelManagerTestNotificationChannelFactory::class);
-
+        $manager->register(NotificationChannelManagerTest_Factory::class);
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $manager->driver('test'));
     }
 
-    public function testChannelManagerDriverNotSupported()
+    public function test_channel_manager_driver_not_supported()
     {
         $manager = new ChannelManager(null);
-        $manager->register(NotificationChannelManagerTestNotificationChannelFactory::class);
-
+        $manager->register(NotificationChannelManagerTest_Factory::class);
         $this->expectException(\InvalidArgumentException::class);
-        $manager->driver('notSupported');
+        $manager->driver('not_supported');
     }
 }
 
-class NotificationChannelManagerTestNotFactory
+class NotificationChannelManagerTest_NotFactory
 {
 }
 
-class NotificationChannelManagerTestNotificationChannelFactory implements \Mediumart\Notifier\Contracts\Channels\Factory
+class NotificationChannelManagerTest_Factory implements \Mediumart\Notifier\Contracts\Channels\Factory
 {
     public static function canHandleNotification($driver)
     {

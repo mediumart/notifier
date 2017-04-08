@@ -1,68 +1,78 @@
 <?php
 
-namespace App\Providers;
-
-use Illuminate\Support\ServiceProvider;
-
-class AppServiceProvider extends ServiceProvider
-{
-    public $notificationsChannels = [
-        \Mediumart\Notifier\Channels\DefaultChannel::class
-    ];
-}
-
-use Mediumart\Notifier\NotifierServiceProvider;
-
-class NotifierExtendedServiceProvider extends NotifierServiceProvider
-{
-    protected $notificationsChannels = [
-        \Mediumart\Notifier\Channels\BroadcastChannel::class
-    ];
-}
-
-class NullServiceProvider extends NotifierServiceProvider
-{
-}
-
-class ProtectedServiceProviderProperty
-{
-    protected $notificationsChannels = [] ;
-}
-
 namespace Tests\Unit;
 
 use Tests\TestCase;
 use RuntimeException;
-use App\Providers\NullServiceProvider;
 use Mediumart\Notifier\ChannelManager;
+use Illuminate\Support\ServiceProvider;
 use Mediumart\Notifier\NotifierServiceProvider;
-use App\Providers\ProtectedServiceProviderProperty;
 
 class NotifierServiceProviderTest extends TestCase
 {
-    public function testRegisterNotificationsChannels()
+    public function test_register_notifications_channels()
     {
-        $manager = $this->app->make(Channelmanager::class);
-        $this->assertSame([
-            \Mediumart\Notifier\Channels\DefaultChannel::class,
-            \Mediumart\Notifier\Channels\BroadcastChannel::class
-        ], $manager->getChannels());
+        $manager = $this->app->make(ChannelManager::class);
+        $notifier = \Mockery::mock('Mediumart\Notifier\NotifierServiceProvider[getNotificationsChannels]', [$this->app]);
+
+        $notifier->shouldReceive('getNotificationsChannels')->andReturn('not\an\array');
+        $notifier->registerNotificationsChannels();
+        $this->assertEmpty($manager->getChannels());
+
+        $notifier->shouldReceive('getNotificationsChannels')->andReturn(['Class\That\Does\Not\exists']);
+        $notifier->registerNotificationsChannels();
+        $this->assertEmpty($manager->getChannels());
     }
 
-    public function testGetNotificationsChannels()
+    public function test_get_self_contained_notifications_channels_property()
     {
-        $notifier = new NullServiceProvider($this->app);
-        $notifier->setProviderName(NullServiceProvider::class);
+        $notifier  = new NotifierServiceProviderTest_ExtendedNotifierServiceProvider($this->app);
+        $this->assertSame(['Mediumart\Notifier\Channels\BroadcastChannel'], $notifier->getNotificationsChannels());
+    }
 
+    public function test_get_notifications_channels_property_from_another_registered_service_provider()
+    {
+        $notifier = $this->app->getProvider(NotifierServiceProvider::class);
+        $notifier->setProviderName(NotifierServiceProviderTest_AppServiceProvider::class);
+        $this->assertSame(['Mediumart\Notifier\Channels\DefaultChannel'],  $notifier->getNotificationsChannels());
+    }
+
+    public function test_get_notifications_channels_return_null_if_property_not_exists()
+    {
+        $notifier = $this->app->getProvider(NotifierServiceProvider::class);
+        $notifier->setProviderName(NotifierServiceProviderTest_NullServiceProvider::class);
         $this->assertNull($notifier->getNotificationsChannels());
     }
 
-    public function testGetNotificationsChannelsThrowsRuntimeException()
+    public function test_get_notifications_channels_throws_runtime_exception()
     {
         $notifier = $this->app->getProvider(NotifierServiceProvider::class);
-        $notifier->setProviderName(ProtectedServiceProviderProperty::class);
+        $notifier->setProviderName(NotifierServiceProviderTest_ExceptionServiceProvider::class);
 
         $this->expectException(RuntimeException::class);
         $notifier->getNotificationsChannels();
     }
+}
+
+class NotifierServiceProviderTest_AppServiceProvider extends ServiceProvider
+{
+    public $notificationsChannels = [
+        'Mediumart\Notifier\Channels\DefaultChannel'
+    ];
+}
+
+class NotifierServiceProviderTest_ExtendedNotifierServiceProvider extends NotifierServiceProvider
+{
+    protected $notificationsChannels = [
+        'Mediumart\Notifier\Channels\BroadcastChannel'
+    ];
+}
+
+class NotifierServiceProviderTest_ExceptionServiceProvider
+{
+    protected $notificationsChannels = [] ;
+}
+
+class NotifierServiceProviderTest_NullServiceProvider
+{
 }

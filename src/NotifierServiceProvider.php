@@ -109,7 +109,7 @@ class NotifierServiceProvider extends ServiceProvider
      * @param  string  $name
      * @return \Illuminate\Support\ServiceProvider|null
      */
-    protected function getProvider($name = null)
+    public function getProvider($name = null)
     {
         $name = $name ?: $this->getProviderName();
 

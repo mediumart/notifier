@@ -1,37 +1,10 @@
 <?php
 
-namespace Nexmo;
-
-use Nexmo\Client\Credentials\Basic as NexmoCredentials;
-
-class Client
-{
-    public function __construct(NexmoCredentials $credentials)
-    {
-    }
-}
-
-namespace Nexmo\Client\Credentials;
-
-class Basic
-{
-    public function __construct($key, $secret)
-    {
-    }
-}
-
-namespace GuzzleHttp;
-
-class Client
-{
-}
-
 namespace Tests\Unit;
 
 use Mockery;
 use Tests\TestCase;
 use Illuminate\Container\Container;
-use GuzzleHttp\Client as HttpClient;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Events\Dispatcher;
 use Mediumart\Notifier\Channels\MailChannel;
@@ -39,12 +12,7 @@ use Mediumart\Notifier\Channels\DefaultChannel;
 
 class NotificationDefaultChannelTest extends TestCase
 {
-    public function tearDown()
-    {
-        Mockery::close();
-    }
-
-    public function testDefaultChannelCreateMailDriver()
+    public function test_default_channel_create_mail_driver()
     {
         $this->assertTrue(DefaultChannel::canHandleNotification('mail'));
 
@@ -60,7 +28,7 @@ class NotificationDefaultChannelTest extends TestCase
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $driver);
     }
 
-    public function testDefaultChannelCreateBroadcastDriver()
+    public function test_default_channel_create_broadcast_driver()
     {
         $this->assertTrue(DefaultChannel::canHandleNotification('broadcast'));
 
@@ -73,31 +41,25 @@ class NotificationDefaultChannelTest extends TestCase
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $driver);
     }
 
-    public function testDefaultChannelCreateDatabaseDriver()
+    public function test_default_channel_create_database_driver()
     {
         $this->assertTrue(DefaultChannel::canHandleNotification('database'));
-
         $driver = DefaultChannel::createDriver('database');
 
         $this->assertInstanceOf('Mediumart\Notifier\Channels\DatabaseChannel', $driver);
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $driver);
     }
 
-    public function testDefaultChannelCreateSlackDriver()
+    public function test_default_channel_create_slack_driver()
     {
         $this->assertTrue(DefaultChannel::canHandleNotification('slack'));
-
-        $container = new Container;
-        $container->instance(HttpClient::class, $http = Mockery::mock('GuzzleHttp\Client'));
-        Container::setInstance($container);
-
         $driver = DefaultChannel::createDriver('slack');
 
         $this->assertInstanceOf('Mediumart\Notifier\Channels\SlackWebhookChannel', $driver);
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $driver);
     }
 
-    public function testDefaultChannelCreateNexmoDriver()
+    public function test_default_channel_create_nexmo_driver()
     {
         $this->assertTrue(DefaultChannel::canHandleNotification('nexmo'));
 
@@ -111,7 +73,7 @@ class NotificationDefaultChannelTest extends TestCase
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $driver);
     }
 
-    public function testDefaultChannelDriverNotSuppported()
+    public function test_default_channel_driver_not_suppported()
     {
         $this->assertFalse(DefaultChannel::canHandleNotification('notSupported'));
         $this->assertNull(DefaultChannel::createDriver('notSupported'));

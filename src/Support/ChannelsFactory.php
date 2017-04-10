@@ -2,6 +2,7 @@
 
 namespace Mediumart\Notifier\Support;
 
+use Exception;
 use Illuminate\Support\Str;
 use Mediumart\Notifier\Contracts\Channels\Factory;
 
@@ -10,8 +11,9 @@ abstract class ChannelsFactory implements Factory
     /**
      * Create a new driver instance.
      *
-     * @param  $driver
-     * @return null|\Mediumart\Notifier\Contracts\Channels\Dispatcher
+     * @param $driver
+     * @return \Mediumart\Notifier\Contracts\Channels\Dispatcher|null
+     * @throws \Exception
      */
     final public static function createDriver($driver)
     {
@@ -22,9 +24,9 @@ abstract class ChannelsFactory implements Factory
         $method = 'create'.Str::studly($driver).'Driver';
 
         if (method_exists($factory = app(static::class), $method)) {
-            $channel = $factory->$method($driver);
+            return $factory->$method($driver);
         }
 
-        return $channel ?: null;
+        throw new Exception("Method [$method] not found on factory class: ".static::class);
     }
 }

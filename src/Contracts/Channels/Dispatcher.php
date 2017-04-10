@@ -11,7 +11,7 @@ Interface Dispatcher
      *
      * @param  $notifiable
      * @param  \Illuminate\Notifications\Notification $notification
-     * @return mixed
+     * @return void
      */
     public function send($notifiable, Notification $notification);
 }

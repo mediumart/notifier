@@ -25,7 +25,7 @@ class ChannelManager extends Manager
      */
     public function register($channel)
     {
-        $this->validateFactory($channel);
+        $this->isFactory($channel) || $this->throwsArgumentException($channel);
 
         if (array_search($channel = ltrim($channel, '\\'), $this->channels) === false) {
             $this->channels[] = $channel;
@@ -90,17 +90,6 @@ class ChannelManager extends Manager
     }
 
     /**
-     * Validate channel.
-     *
-     * @param  string  $channel
-     * @return bool
-     */
-    protected function validateFactory($channel)
-    {
-        return $this->isFactory($channel) || $this->argumentException($channel) ;
-    }
-
-    /**
      * Check channel is a valid factory.
      *
      * @param  string  $channel
@@ -117,7 +106,7 @@ class ChannelManager extends Manager
      * @param  string  $channel
      * @throws InvalidArgumentException
      */
-    protected function argumentException($channel)
+    protected function throwsArgumentException($channel)
     {
         throw new InvalidArgumentException(sprintf(
             "class [$channel] is not a valid implementation of '%s' interface.",

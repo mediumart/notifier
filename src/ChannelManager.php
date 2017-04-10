@@ -20,12 +20,12 @@ class ChannelManager extends Manager
     /**
      * Register a new channel driver.
      *
-     * @param  string $channel
+     * @param  string  $channel
      * @return void
      */
     public function register($channel)
     {
-        $this->throwExceptionIfChannelNotAValidFactory($channel);
+        $this->validateFactory($channel);
 
         if (array_search($channel = ltrim($channel, '\\'), $this->channels) === false) {
             $this->channels[] = $channel;
@@ -35,7 +35,7 @@ class ChannelManager extends Manager
     /**
      * Create a new driver instance.
      *
-     * @param  string $driver
+     * @param  string  $driver
      * @return mixed
      * @throws InvalidArgumentException
      */
@@ -64,7 +64,7 @@ class ChannelManager extends Manager
     /**
      * Create a new channel driver.
      *
-     * @param  $driver
+     * @param  string  $driver
      * @return null|\Mediumart\Notifier\Contracts\Channels\Dispatcher
      */
     protected function createChannelDriver($driver)
@@ -90,18 +90,38 @@ class ChannelManager extends Manager
     }
 
     /**
+     * Validate channel.
+     *
+     * @param  string  $channel
+     * @return bool
+     */
+    protected function validateFactory($channel)
+    {
+        return $this->isFactory($channel) || $this->argumentException($channel) ;
+    }
+
+    /**
+     * Check channel is a valid factory.
+     *
+     * @param  string  $channel
+     * @return bool
+     */
+    public function isFactory($channel)
+    {
+        return (new ReflectionClass($channel))->implementsInterface(Factory::class);
+    }
+
+    /**
      * Invalid channel handler.
      *
-     * @param $channel
-     * throws InvalidArgumentException
+     * @param  string  $channel
+     * @throws InvalidArgumentException
      */
-    protected function throwExceptionIfChannelNotAValidFactory($channel)
+    protected function argumentException($channel)
     {
-        if (!(new ReflectionClass($channel))->implementsInterface(Factory::class)) {
-            throw new InvalidArgumentException(sprintf(
-                "class [$channel] is not a valid implementation of '%s' interface.",
-                Factory::class
-            ));
-        }
+        throw new InvalidArgumentException(sprintf(
+            "class [$channel] is not a valid implementation of '%s' interface.",
+            Factory::class
+        ));
     }
 }

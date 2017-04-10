@@ -137,7 +137,7 @@ class NotifierServiceProvider extends ServiceProvider
      */
     public function setProviderName($name)
     {
-        $this->providerName = $name;
+        $this->providerName = !empty($name) ? $name : null;
     }
 
     /**

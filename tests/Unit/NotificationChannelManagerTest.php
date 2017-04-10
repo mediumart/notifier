@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit;
+namespace Notifier\Tests\Unit;
 
 use Mockery;
-use Tests\TestCase;
+use Notifier\Tests\TestCase;
 use Mediumart\Notifier\ChannelManager;
 
 class NotificationChannelManagerTest extends TestCase

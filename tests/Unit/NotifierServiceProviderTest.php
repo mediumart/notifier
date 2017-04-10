@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit;
+namespace Notifier\Tests\Unit;
 
-use Tests\TestCase;
 use RuntimeException;
+use Notifier\Tests\TestCase;
 use Mediumart\Notifier\ChannelManager;
 use Illuminate\Support\ServiceProvider;
 use Mediumart\Notifier\NotifierServiceProvider;

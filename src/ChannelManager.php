@@ -41,24 +41,11 @@ class ChannelManager extends Manager
      */
     protected function createDriver($driver)
     {
-        $channel = $this->createChannelDriver($driver);
-
-        if ($channel instanceof Dispatcher) {
+        if (($channel = $this->channelCreate($driver)) instanceof Dispatcher) {
             return $channel;
         }
 
-        // We'll check to see if a creator method exists for the given driver. If not we
-        // will check for a custom driver creator, which allows developers to create
-        // drivers using their own customized driver creator Closure to create it.
-        if (isset($this->customCreators[$driver])) {
-            return $this->callCustomCreator($driver);
-        }
-
-        if (class_exists($driver)) {
-            return $this->app->make($driver);
-        }
-
-        throw new InvalidArgumentException("Driver [$driver] not supported.");
+        return parent::createDriver($driver);
     }
 
     /**
@@ -67,12 +54,11 @@ class ChannelManager extends Manager
      * @param  string  $driver
      * @return null|\Mediumart\Notifier\Contracts\Channels\Dispatcher
      */
-    protected function createChannelDriver($driver)
+    protected function channelCreate($driver)
     {
         foreach ($this->channels as $channel) {
-            if ($channel::canHandleNotification($driver) &&
-                $channel = $channel::createDriver($driver)) {
-                return $channel;
+            if ($channel::canHandleNotification($driver)) {
+                return $channel::createDriver($driver);
             }
         }
 
@@ -108,9 +94,8 @@ class ChannelManager extends Manager
      */
     protected function throwsArgumentException($channel)
     {
-        throw new InvalidArgumentException(sprintf(
-            "class [$channel] is not a valid implementation of '%s' interface.",
-            Factory::class
-        ));
+        $msg = "class [$channel] is not a valid implementation of '%s' interface.";
+
+        throw new InvalidArgumentException(sprintf($msg, Factory::class));
     }
 }

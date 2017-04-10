@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Notifier\Tests;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -8,7 +8,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             'Mediumart\Notifier\NotifierServiceProvider',
-            'Tests\Unit\NotifierServiceProviderTest_AppServiceProvider',
+            'Notifier\Tests\Unit\NotifierServiceProviderTest_AppServiceProvider',
         ];
     }
 }

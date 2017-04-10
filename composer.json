@@ -13,9 +13,7 @@
     "require-dev": {
         "orchestra/testbench": "~3.4",
         "phpunit/phpunit": "^5.7",
-        "mockery/mockery": "^0.9.9",
-        "guzzlehttp/guzzle": "^6.2",
-        "nexmo/client": "@beta"
+        "mockery/mockery": "^0.9.9"
     },
     "autoload": {
         "psr-4": {
@@ -24,7 +22,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Notifier\\Tests\\": "tests/"
         }
     }
 }

@@ -50,6 +50,10 @@ class NotifierServiceProvider extends ServiceProvider
         $this->app->alias(
             ChannelManager::class, FactoryContract::class
         );
+
+        $this->app->alias(
+            ChannelManager::class, \Illuminate\Notifications\ChannelManager::class
+        );
     }
 
     /**

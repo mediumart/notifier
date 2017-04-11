@@ -6,6 +6,7 @@ use RuntimeException;
 use Notifier\Tests\TestCase;
 use Mediumart\Notifier\ChannelManager;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Notification;
 use Mediumart\Notifier\NotifierServiceProvider;
 
 class NotifierServiceProviderTest extends TestCase
@@ -57,6 +58,11 @@ class NotifierServiceProviderTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $notifier->getNotificationsChannels();
+    }
+
+    public function test_notification_facade_proxy()
+    {
+        $this->assertInstanceOf(ChannelManager::class, Notification::getFacadeRoot());
     }
 }
 

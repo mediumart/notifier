@@ -63,18 +63,18 @@ class NotifierServiceProvider extends ServiceProvider
      */
     public function registerNotificationsChannels()
     {
-        if (! is_array($channels = $this->getNotificationsChannels())
-            || empty($channels)) {
-            return;
-        }
+        if (is_array($channels = $this->getNotificationsChannels()) &&
+            !empty($channels)
+        ) {
+            $manager = $this->app->make(ChannelManager::class);
 
-        $manager = $this->app->make(ChannelManager::class);
-
-        foreach ($channels as $channel) {
-            if (class_exists($channel)) {
-                $manager->register($channel);
+            foreach ($channels as $channel) {
+                if (class_exists($channel)) {
+                    $manager->register($channel);
+                }
             }
         }
+
     }
 
     /**
@@ -96,12 +96,8 @@ class NotifierServiceProvider extends ServiceProvider
         }
 
         if (! (new ReflectionProperty($provider, $this->notificationsChannelsProperty))->isPublic()) {
-            throw new RuntimeException(
-                sprintf("The visibility of property [%s] in class [%s] should be 'public'",
-                    $this->notificationsChannelsProperty,
-                    $provider
-                )
-            );
+            $msg = "The visibility of property [%s] in class [%s] should be 'public'";
+            throw new RuntimeException(sprintf($msg, $this->notificationsChannelsProperty, $provider));
         }
 
         return $this->getProvider($provider)->{$this->notificationsChannelsProperty};
@@ -115,9 +111,7 @@ class NotifierServiceProvider extends ServiceProvider
      */
     public function getProvider($name = null)
     {
-        $name = $name ?: $this->getProviderName();
-
-        return $this->app->getProvider($name);
+        return $this->app->getProvider($name ?: $this->getProviderName());
     }
 
     /**

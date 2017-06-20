@@ -63,9 +63,7 @@ class NotifierServiceProvider extends ServiceProvider
      */
     public function registerNotificationsChannels()
     {
-        if (is_array($channels = $this->getNotificationsChannels()) &&
-            !empty($channels)
-        ) {
+        if (is_array($channels = $this->getNotificationsChannels()) && !empty($channels)) {
             $manager = $this->app->make(ChannelManager::class);
 
             foreach ($channels as $channel) {

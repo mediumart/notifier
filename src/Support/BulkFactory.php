@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Support\Str;
 use Mediumart\Notifier\Contracts\Channels\Factory;
 
-abstract class ChannelsFactory implements Factory
+abstract class BulkFactory implements Factory
 {
     /**
      * Create a new driver instance.

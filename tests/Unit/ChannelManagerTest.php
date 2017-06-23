@@ -6,7 +6,7 @@ use Mockery;
 use Notifier\Tests\TestCase;
 use Mediumart\Notifier\ChannelManager;
 
-class NotificationChannelManagerTest extends TestCase
+class ChannelManagerTest extends TestCase
 {
     public function test_channel_manager_register_channel_factory()
     {
@@ -37,6 +37,9 @@ class NotificationChannelManagerTest extends TestCase
         $manager->driver('not_supported');
     }
 }
+
+
+// /stubs
 
 class NotificationChannelManagerTest_NotFactory
 {

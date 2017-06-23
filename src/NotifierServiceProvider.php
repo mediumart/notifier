@@ -72,7 +72,6 @@ class NotifierServiceProvider extends ServiceProvider
                 }
             }
         }
-
     }
 
     /**
@@ -127,7 +126,7 @@ class NotifierServiceProvider extends ServiceProvider
     }
 
     /**
-     * Set teh channels provider name.
+     * Set the channels provider name.
      *
      * @param $name
      */

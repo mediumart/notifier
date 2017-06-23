@@ -5,26 +5,35 @@ namespace Notifier\Tests\Unit;
 use Mockery;
 use Exception;
 use Notifier\Tests\TestCase;
-use Mediumart\Notifier\Support\ChannelsFactory;
+use Mediumart\Notifier\Support\BulkFactory;
 
-class ChannelsFactoryTest extends TestCase
+class BulkFactoryTest extends TestCase
 {
-    public function test_channels_factory_create_driver()
+    /**
+     * @test
+     */
+    public function channels_factory_create_driver()
     {
-        $factory = new ChannelsFactoryTest_MyChannelsFactory();
+        $factory = new Extended_BulkFactory();
         $this->assertNull($factory->createDriver('not_supported'));
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $factory->createDriver('test'));
     }
 
-    public function test_channels_factory_create_driver_missing_method()
+    /**
+     * @test
+     */
+    public function channels_factory_create_driver_missing_method()
     {
-        $factory = new ChannelsFactoryTests_MissingMethod();
+        $factory = new Extended_BulkFactory_Missing_Method();
         $this->expectException(Exception::class);
         $factory->createDriver('test');
     }
 }
 
-class ChannelsFactoryTest_MyChannelsFactory extends ChannelsFactory
+
+// /stubs
+// 
+class Extended_BulkFactory extends BulkFactory
 {
     public static function canHandleNotification($driver)
     {
@@ -37,7 +46,7 @@ class ChannelsFactoryTest_MyChannelsFactory extends ChannelsFactory
     }
 }
 
-class ChannelsFactoryTests_MissingMethod extends ChannelsFactory
+class Extended_BulkFactory_Missing_Method extends BulkFactory
 {
     public static function canHandleNotification($driver)
     {

@@ -41,7 +41,7 @@ class ChannelManager extends Manager
      */
     protected function createDriver($driver)
     {
-        if (($channel = $this->channelCreate($driver)) instanceof Dispatcher) {
+        if ($channel = $this->channelCreate($driver)) {
             return $channel;
         }
 

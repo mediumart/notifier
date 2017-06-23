@@ -66,6 +66,10 @@ class NotifierServiceProviderTest extends TestCase
     }
 }
 
+
+// /stubs
+// 
+
 class NotifierServiceProviderTest_AppServiceProvider extends ServiceProvider
 {
     public $notificationsChannels = [

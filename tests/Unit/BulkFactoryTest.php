@@ -12,17 +12,25 @@ class BulkFactoryTest extends TestCase
     /**
      * @test
      */
-    public function channels_factory_create_driver()
+    public function create_driver()
     {
         $factory = new Extended_BulkFactory();
-        $this->assertNull($factory->createDriver('not_supported'));
         $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $factory->createDriver('test'));
     }
 
     /**
      * @test
      */
-    public function channels_factory_create_driver_missing_method()
+    public function create_driver_given_not_supported_driver_returns_null()
+    {
+        $factory = new Extended_BulkFactory();
+        $this->assertNull($factory->createDriver('not_supported'));
+    }
+
+    /**
+     * @test
+     */
+    public function create_driver_given_supported_driver_but_missing_factory_method()
     {
         $factory = new Extended_BulkFactory_Missing_Method();
         $this->expectException(Exception::class);

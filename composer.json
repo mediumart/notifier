@@ -3,6 +3,7 @@
     "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "notification", "channel"],
+    "description": "Custom factories for custom notifications channels",
     "authors": [
         {
             "name": "Isaac Esso",

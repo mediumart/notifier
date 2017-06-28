@@ -89,6 +89,8 @@ public $notificationsChannels = [
 ];
 ```
 
+To quickly Taste the pacakge use the [Mediumart\Notifier\Examples\FakeScreenChannel](https://github.com/mediumart/notifier/blob/master/src/Examples/FakeScreenChannel.php) example channel.
+
 ## License
 
 Mediumart Notifier is an open-sourced software licensed under the [MIT license](https://github.com/mediumart/notifier/blob/master/LICENSE.txt).

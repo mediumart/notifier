@@ -1,4 +1,4 @@
-# Notifier
+# Notifier for laravel 5.3+
 
 [![Build Status](https://travis-ci.org/mediumart/notifier.svg?branch=master)](https://travis-ci.org/mediumart/notifier)
 [![Latest Stable Version](https://poser.pugx.org/mediumart/notifier/v/stable)](https://packagist.org/packages/mediumart/notifier)

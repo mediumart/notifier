@@ -88,7 +88,7 @@ public $notificationsChannels = [
 ];
 ```
 
-To quickly Taste the pacakge use the [Mediumart\Notifier\Examples\FakeScreenChannel](https://github.com/mediumart/notifier/blob/master/src/Examples/FakeScreenChannel.php) example channel.
+To quickly Taste the package use the [Mediumart\Notifier\Examples\FakeScreenChannel](https://github.com/mediumart/notifier/blob/master/src/Examples/FakeScreenChannel.php) example channel.
 
 ## License
 

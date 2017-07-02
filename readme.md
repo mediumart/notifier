@@ -75,6 +75,14 @@ public static function createDriver($driver)
 }
 ```
 
+You can use the provided `notifier:channel` artisan command to generate your channel class, like in the following example:
+
+```
+$ php artisan notifier:channel <channel_class_name>
+```
+
+A new channel class will be created under `app/Notifications/Channels/<channel_class_name>.php`.
+
 Now that you have a fully functionnal factory, you need to register it with your application, the easiest way to do that is to create(if not already exists) a **public** property of type `array`, named `$notificationsChannels` inside your `App\Providers\AppServiceProvider` and list your factory class name in there.
 
 ```php

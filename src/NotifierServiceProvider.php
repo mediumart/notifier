@@ -29,6 +29,12 @@ class NotifierServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\NotifierChannelCommand::class,
+            ]);
+        }
+
         $this->registerNotificationsChannels();
     }
 

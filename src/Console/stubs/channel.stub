@@ -1,0 +1,43 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Notifications\Notification;
+use Mediumart\Notifier\Contracts\Channels\Factory;
+
+class DummyClass implements Factory
+{
+    /**
+     * Send the given notification.
+     *
+     * @param  $notifiable
+     * @param  \Illuminate\Notifications\Notification $notification
+     * @return void
+     */
+    public function send($notifiable, Notification $notification)
+    {
+        //
+    }
+
+    /**
+     * Check for the channel capacity.
+     *
+     * @param  string $driver
+     * @return bool
+     */
+    public static function canHandleNotification($driver)
+    {
+        DummyHooks
+    }
+
+    /**
+     * Create a new driver instance.
+     *
+     * @param  $driver
+     * @return mixed
+     */
+    public static function createDriver($driver)
+    {
+        //
+    }
+}

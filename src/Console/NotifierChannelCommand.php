@@ -26,7 +26,7 @@ class NotifierChannelCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $type = 'Notification Channel';
+    protected $type = 'Channel';
         
     /**
      * Build the class with the given name.

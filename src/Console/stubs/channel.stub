@@ -3,9 +3,8 @@
 namespace DummyNamespace;
 
 use Illuminate\Notifications\Notification;
-use Mediumart\Notifier\Contracts\Channels\Factory;
 
-class DummyClass implements Factory
+class DummyClass
 {
     /**
      * Send the given notification.

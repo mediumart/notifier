@@ -2,11 +2,8 @@
 
 namespace Mediumart\Notifier;
 
-use ReflectionClass;
-use InvalidArgumentException;
-use Mediumart\Notifier\Contracts\Channels\Factory;
-use Mediumart\Notifier\Contracts\Channels\Dispatcher;
 use Illuminate\Notifications\ChannelManager as Manager;
+use Mediumart\Notifier\Exception\SpecificationException;
 
 class ChannelManager extends Manager
 {
@@ -22,14 +19,16 @@ class ChannelManager extends Manager
      *
      * @param  string  $channel
      * @return void
+     *
+     * @throws  SpecificationException
      */
     public function register($channel)
     {
-        $this->isFactory($channel) || $this->throwsArgumentException($channel);
-
-        if (array_search($channel = ltrim($channel, '\\'), $this->channels) === false) {
-            $this->channels[] = $channel;
+        if (! (new FactorySpecification)->isSatisfiedBy($channel) ) {
+            throw (new SpecificationException)->exception($channel);
         }
+
+        $this->channels[] = ltrim($channel, '\\');
     }
 
     /**
@@ -37,7 +36,8 @@ class ChannelManager extends Manager
      *
      * @param  string  $driver
      * @return mixed
-     * @throws InvalidArgumentException
+     * 
+     * @throws \InvalidArgumentException
      */
     protected function createDriver($driver)
     {
@@ -52,11 +52,11 @@ class ChannelManager extends Manager
      * Create a new channel driver.
      *
      * @param  string  $driver
-     * @return null|\Mediumart\Notifier\Contracts\Channels\Dispatcher
+     * @return mixed
      */
     protected function channelCreate($driver)
     {
-        foreach ($this->channels as $channel) {
+        foreach ($this->getChannels() as $channel) {
             if ($channel::canHandleNotification($driver)) {
                 return $channel::createDriver($driver);
             }
@@ -72,30 +72,6 @@ class ChannelManager extends Manager
      */
     public function getChannels()
     {
-        return $this->channels;
-    }
-
-    /**
-     * Check channel is a valid factory.
-     *
-     * @param  string  $channel
-     * @return bool
-     */
-    public function isFactory($channel)
-    {
-        return (new ReflectionClass($channel))->implementsInterface(Factory::class);
-    }
-
-    /**
-     * Invalid channel handler.
-     *
-     * @param  string  $channel
-     * @throws InvalidArgumentException
-     */
-    protected function throwsArgumentException($channel)
-    {
-        $msg = "class [$channel] is not a valid implementation of '%s' interface.";
-
-        throw new InvalidArgumentException(sprintf($msg, Factory::class));
+        return array_unique($this->channels);
     }
 }

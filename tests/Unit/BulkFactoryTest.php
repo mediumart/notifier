@@ -15,7 +15,7 @@ class BulkFactoryTest extends TestCase
     public function create_driver()
     {
         $factory = new Extended_BulkFactory();
-        $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $factory->createDriver('test'));
+        $this->assertInstanceOf(Bulk_Factory_Test_Driver::class, $factory->createDriver('test'));
     }
 
     /**
@@ -41,6 +41,11 @@ class BulkFactoryTest extends TestCase
 
 // /stubs
 // 
+
+class Bulk_Factory_Test_Driver
+{
+}
+
 class Extended_BulkFactory extends BulkFactory
 {
     public static function canHandleNotification($driver)
@@ -50,7 +55,7 @@ class Extended_BulkFactory extends BulkFactory
 
     protected function CreateTestDriver($driver)
     {
-        return Mockery::mock('Mediumart\Notifier\Contracts\Channels\Dispatcher');
+        return new Bulk_Factory_Test_Driver;
     }
 }
 

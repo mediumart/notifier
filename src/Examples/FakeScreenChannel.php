@@ -3,7 +3,6 @@
 namespace Mediumart\Notifier\Examples;
 
 use Illuminate\Notifications\Notification;
-use Mediumart\Notifier\Contracts\Channels\Factory;
 
 /**
  * Use this class to quickly **taste** the package.
@@ -31,7 +30,7 @@ use Mediumart\Notifier\Contracts\Channels\Factory;
  * now this message will just be die an dump to the screen when you notify any notifiable
  * instance of the `SomethingHappenedNotification`.
  */
-class FakeScreenChannel implements Factory
+class FakeScreenChannel
 {
     /**
      * Send the given notification.
@@ -60,7 +59,7 @@ class FakeScreenChannel implements Factory
      * Create a new driver instance.
      *
      * @param  $driver
-     * @return mixed|\Mediumart\Notifier\Contracts\Channels\Dispatcher
+     * @return mixed
      */
     public static function createDriver($driver)
     {

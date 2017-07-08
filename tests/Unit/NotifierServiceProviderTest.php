@@ -8,7 +8,6 @@ use Mediumart\Notifier\ChannelManager;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Notification;
 use Mediumart\Notifier\NotifierServiceProvider;
-use Mediumart\Notifier\Contracts\Channels\Factory;
 
 class NotifierServiceProviderTest extends TestCase
 {
@@ -97,10 +96,11 @@ class NotifierServiceProviderTest extends TestCase
 
 // /stubs
 // 
-class TestChannelFactory implements Factory
+class TestChannelFactory
 {
     public static function canHandleNotification($driver)
     {
+        return true;
     }
     public static function createDriver($driver)
     {

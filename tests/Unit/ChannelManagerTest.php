@@ -5,6 +5,7 @@ namespace Notifier\Tests\Unit;
 use Mockery;
 use Notifier\Tests\TestCase;
 use Mediumart\Notifier\ChannelManager;
+use Mediumart\Notifier\Exception\SpecificationException;
 
 class ChannelManagerTest extends TestCase
 {
@@ -24,18 +25,18 @@ class ChannelManagerTest extends TestCase
     public function channel_manager_register_channel_factory_not_given()
     {
         $manager = new ChannelManager(null);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(SpecificationException::class);
         $manager->register(NotificationChannelManagerTest_NotFactory::class);
     }
 
     /**
      * @test
      */
-    public function channel_manager_driver_method_returns_channel_dispatcher_instance()
+    public function channel_manager_driver_method_returns_channel_driver_instance()
     {
         $manager = new ChannelManager(null);
         $manager->register(NotificationChannelManagerTest_Factory::class);
-        $this->assertInstanceOf('Mediumart\Notifier\Contracts\Channels\Dispatcher', $manager->driver('test'));
+        $this->assertInstanceOf(NotificationChannelManagerTest_Driver::class, $manager->driver('test'));
     }
 
     /**
@@ -57,7 +58,11 @@ class NotificationChannelManagerTest_NotFactory
 {
 }
 
-class NotificationChannelManagerTest_Factory implements \Mediumart\Notifier\Contracts\Channels\Factory
+class NotificationChannelManagerTest_Driver
+{
+}
+
+class NotificationChannelManagerTest_Factory
 {
     public static function canHandleNotification($driver)
     {
@@ -66,6 +71,6 @@ class NotificationChannelManagerTest_Factory implements \Mediumart\Notifier\Cont
 
     public static function createDriver($driver)
     {
-        return Mockery::mock('Mediumart\Notifier\Contracts\Channels\Dispatcher');
+        return new NotificationChannelManagerTest_Driver;
     }
 }

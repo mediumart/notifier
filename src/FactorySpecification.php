@@ -118,7 +118,7 @@ class FactorySpecification
         foreach ((array) $methods as $method) {
             $parameter = $channel->getMethod($method)->getParameters()[0];
 
-            if (! method_exists($parameter, 'getType')) {
+            if (version_compare(PHP_VERSION, "7.0.0", "<")) {
                 continue;
             }
 

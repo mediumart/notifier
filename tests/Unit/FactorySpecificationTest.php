@@ -19,7 +19,11 @@ class FactorySpecificationTest extends TestCase
         $this->assertFalse((new FactorySpecification)->isSatisfiedBy(FactorySpecificationTest_Not_Static::class));
         $this->assertFalse((new FactorySpecification)->isSatisfiedBy(FactorySpecificationTest_Not_Public::class));
         $this->assertFalse((new FactorySpecification)->isSatisfiedBy(FactorySpecificationTest_Invalid_Params_Count::class));
-        $this->assertFalse((new FactorySpecification)->isSatisfiedBy(FactorySpecificationTest_Not_Matching_String::class));
+
+        if (version_compare(PHP_VERSION, "7.0.0", ">=")) {
+            $this->assertFalse((new FactorySpecification)->isSatisfiedBy(FactorySpecificationTest_Not_Matching_String::class));
+        }
+
         $this->assertFalse((new FactorySpecification)->isSatisfiedBy(FactorySpecificationTest_Not_Retuning_Boolean::class));
     }
 }

@@ -13,7 +13,7 @@ abstract class BulkFactory
      * @param  string  $driver
      * @return bool
      */
-    abstract public static function canHandleNotification($driver);
+    public static function canHandleNotification($driver) {}
 
     /**
      * Create a new driver instance.

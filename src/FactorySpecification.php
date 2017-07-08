@@ -118,6 +118,10 @@ class FactorySpecification
         foreach ((array) $methods as $method) {
             $parameter = $channel->getMethod($method)->getParameters()[0];
 
+            if (! method_exists($parameter, 'getType')) {
+                continue;
+            }
+
             if (! is_null($type = $parameter->getType()) && (string) $type != 'string') {
                 static::$error = ['invalidParamsType', $method, $parameter->name];
 

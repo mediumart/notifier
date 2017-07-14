@@ -116,11 +116,11 @@ class FactorySpecification
     protected function parameterMatchesString($channel, $methods)
     {
         foreach ((array) $methods as $method) {
-            $parameter = $channel->getMethod($method)->getParameters()[0];
-
             if (version_compare(PHP_VERSION, "7.0.0", "<")) {
                 continue;
             }
+
+            $parameter = $channel->getMethod($method)->getParameters()[0];
 
             if (! is_null($type = $parameter->getType()) && (string) $type != 'string') {
                 static::$error = ['invalidParamsType', $method, $parameter->name];

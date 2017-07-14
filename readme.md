@@ -42,13 +42,13 @@ Mediumart\Notifier\NotifierServiceProvider::class
 ```
 ## Usage
 
-You need a class that will act as factory for your custom channel. This factory class can be the custom channel class itself if you want, it just need to implement the `Mediumart\Notifier\Contracts\Channels\Factory` interface which declare two static methods: `canHandleNotification` and `createDriver`. Both methods receive as their only argument the driver hook name that is to be created.
+You need a class that will act as factory for your custom channel. This factory class can be the custom channel class itself if you want, it just need to implements two public static methods: `canHandleNotification` and `createDriver`. Both methods receive as their only argument the driver hook name that is to be created.
 
 The first method `canHandleNotification` should return a Boolean(`true` or `false`) to indicate whether or not the factory is able to create the appropriate driver for the notification.
 
 ```php
 /**
- * Check for the factory capacity.
+ * Check for the channel capacity.
  *
  * @param  string $driver
  * @return bool
@@ -66,7 +66,7 @@ The second method `createDriver` will be called by the `ChannelManager` if the f
  * Create a new driver instance.
  *
  * @param  $driver
- * @return mixed|\Mediumart\Notifier\Contracts\Channels\Dispatcher
+ * @return mixed
  */
 public static function createDriver($driver)
 {

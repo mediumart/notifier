@@ -7,20 +7,22 @@ use Illuminate\Support\Str;
 
 abstract class BulkFactory
 {
-     /**
+    /**
      * Check for the factory capacity.
      *
      * @param  string  $driver
      * @return bool
      */
-    public static function canHandleNotification($driver) {}
+    public static function canHandleNotification($driver)
+    {
+    }
 
     /**
      * Create a new driver instance.
      *
      * @param $driver
      * @return mixed
-     * 
+     *
      * @throws \Exception
      */
     final public static function createDriver($driver)

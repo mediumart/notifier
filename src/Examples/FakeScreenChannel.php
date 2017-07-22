@@ -27,7 +27,7 @@ use Illuminate\Notifications\Notification;
  *         return 'Thank you for using our application!';
  *     }
  *
- * now this message will just be die an dump to the screen when you notify any notifiable
+ * now this message will just be dumped to the screen when you notify any notifiable
  * instance of the `SomethingHappenedNotification`.
  */
 class FakeScreenChannel

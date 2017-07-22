@@ -37,7 +37,7 @@ Using composer:
 $ composer require mediumart/notifier
 ```
 
-If you are using laravel 5 prior to version 5.5, add the service provider in the `providers` array inside `config/app.php`
+If you are using laravel 5.3+ prior to version 5.5, add the service provider in the `providers` array inside `config/app.php`
 ```php
 Mediumart\Notifier\NotifierServiceProvider::class
 ```

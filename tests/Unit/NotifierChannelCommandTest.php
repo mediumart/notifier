@@ -24,8 +24,10 @@ class NotifierChannelCommandTest extends TestCase
         $command = new NotifierChannelCommand($this->app->make('files'));
         $command->setLaravel($this->app);
 
-        Artisan::call('notifier:channel', ['name' => 'FakeTestChannel', '--aliases' => 'foo,bar']);
+        Artisan::call('notifier:channel', ['name' => 'FakeTestChannel']);
+        Artisan::call('notifier:channel', ['name' => 'FakeTestChannel2', '--aliases' => 'foo,bar']);
 
-        $this->assertTrue(file_exists($this->app->make('path').'/Notifications/Channels/FakeTestChannel.php'));;
+        $this->assertTrue(file_exists($this->app->make('path').'/Notifications/Channels/FakeTestChannel.php'));
+        $this->assertTrue(file_exists($this->app->make('path').'/Notifications/Channels/FakeTestChannel2.php'));
     }
 }

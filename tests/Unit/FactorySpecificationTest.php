@@ -4,6 +4,7 @@ namespace Notifier\Tests\Unit;
 
 use Mockery;
 use Notifier\Tests\TestCase;
+use Mediumart\Notifier\ChannelManager;
 use Mediumart\Notifier\FactorySpecification;
 
 class FactorySpecificationTest extends TestCase
@@ -25,6 +26,48 @@ class FactorySpecificationTest extends TestCase
         }
 
         $this->assertFalse((new FactorySpecification)->isSatisfiedBy(FactorySpecificationTest_Not_Retuning_Boolean::class));
+    }
+
+    /**
+     * @test
+     */
+    public function channel_manager_register_throws_specification_exception_not_matching_string()
+    {
+        if (version_compare(PHP_VERSION, "7.0.0", ">=")) {
+            $manager = new ChannelManager(null);
+            $this->expectException(\Mediumart\Notifier\Exception\SpecificationException::class);
+            $manager->register(FactorySpecificationTest_Not_Matching_String::class);
+        } else {
+            $this->assertTrue(true);
+        }
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider testsClasses
+     * @expectedException \Mediumart\Notifier\Exception\SpecificationException
+     */
+    public function channel_manager_register_throws_specification_exception($factoryClassName)
+    {
+        $manager = new ChannelManager(null);
+        $manager->register($factoryClassName);
+    }
+
+    /**
+     * testsClasses.
+     * 
+     * @return array
+     */
+    public function testsClasses() 
+    {
+        return [
+            [FactorySpecificationTest_NotFactory::class],
+            [FactorySpecificationTest_Not_Static::class],
+            [FactorySpecificationTest_Not_Public::class],
+            [FactorySpecificationTest_Invalid_Params_Count::class],
+            [FactorySpecificationTest_Not_Retuning_Boolean::class],
+        ];
     }
 }
 

@@ -21,11 +21,12 @@ class ChannelManagerTest extends TestCase
 
     /**
      * @test
+     *
+     * @expectedException \Mediumart\Notifier\Exception\SpecificationException
      */
     public function channel_manager_register_channel_factory_not_given()
     {
         $manager = new ChannelManager(null);
-        $this->expectException(SpecificationException::class);
         $manager->register(NotificationChannelManagerTest_NotFactory::class);
     }
 

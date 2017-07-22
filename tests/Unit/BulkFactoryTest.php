@@ -9,6 +9,14 @@ use Mediumart\Notifier\Support\BulkFactory;
 
 class BulkFactoryTest extends TestCase
 {
+    /** 
+     * @test
+     */
+    public function can_handle_notification_returns_null() 
+    {
+        $this->assertNull(BulkFactory::canHandleNotification('test'));
+    }
+    
     /**
      * @test
      */

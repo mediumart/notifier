@@ -1,6 +1,7 @@
 # Notifier for laravel 5.3+
 
 [![Build Status](https://travis-ci.org/mediumart/notifier.svg?branch=master)](https://travis-ci.org/mediumart/notifier)
+[![Coverage Status](https://coveralls.io/repos/github/mediumart/notifier/badge.svg?branch=master)](https://coveralls.io/github/mediumart/notifier?branch=master)
 [![License](https://poser.pugx.org/mediumart/notifier/license)](https://packagist.org/packages/mediumart/notifier)
 
 ## Description

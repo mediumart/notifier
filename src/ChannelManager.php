@@ -24,11 +24,17 @@ class ChannelManager extends Manager
      */
     public function register($channel)
     {
-        if (! (new FactorySpecification)->isSatisfiedBy($channel) ) {
-            throw (new SpecificationException)->exception($channel);
+        if ($this->isRegistered($channel)) {
+            return;
         }
 
-        $this->channels[] = ltrim($channel, '\\');
+        if ((new FactorySpecification)->isSatisfiedBy($channel) ) {
+            $this->channels[] = $channel;
+
+            return;
+        }
+        
+        throw (new SpecificationException)->exception($channel);
     }
 
     /**
@@ -72,6 +78,17 @@ class ChannelManager extends Manager
      */
     public function getChannels()
     {
-        return array_unique($this->channels);
+        return $this->channels;
+    }
+
+    /**
+     * Check if a given channel is registered.
+     * 
+     * @param  string  $channel 
+     * @return boolean
+     */
+    protected function isRegistered($channel)
+    {
+        return array_search($channel, $this->channels) !== false;
     }
 }

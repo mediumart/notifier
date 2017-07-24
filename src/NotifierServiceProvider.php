@@ -74,7 +74,7 @@ class NotifierServiceProvider extends ServiceProvider
 
             foreach ($channels as $channel) {
                 if (class_exists($channel)) {
-                    $manager->register($channel);
+                    $manager->register(ltrim($channel, '\\'));
                 }
             }
         }

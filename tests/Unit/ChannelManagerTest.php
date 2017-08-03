@@ -28,6 +28,7 @@ class ChannelManagerTest extends TestCase
     {
         $manager = new ChannelManager(null);
         $manager->register(NotificationChannelManagerTest_NotFactory::class);
+        $manager->driver('invalid_factory');
     }
 
     /**

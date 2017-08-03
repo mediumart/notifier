@@ -37,6 +37,7 @@ class FactorySpecificationTest extends TestCase
             $manager = new ChannelManager(null);
             $this->expectException(\Mediumart\Notifier\Exception\SpecificationException::class);
             $manager->register(FactorySpecificationTest_Not_Matching_String::class);
+            $manager->driver('invalid_factory');
         } else {
             $this->assertTrue(true);
         }
@@ -52,6 +53,7 @@ class FactorySpecificationTest extends TestCase
     {
         $manager = new ChannelManager(null);
         $manager->register($factoryClassName);
+        $manager->driver('invalid_factory');
     }
 
     /**

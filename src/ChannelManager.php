@@ -19,22 +19,10 @@ class ChannelManager extends Manager
      *
      * @param  string  $channel
      * @return void
-     *
-     * @throws  SpecificationException
      */
     public function register($channel)
     {
-        if ($this->isRegistered($channel)) {
-            return;
-        }
-
-        if ((new FactorySpecification)->isSatisfiedBy($channel) ) {
-            $this->channels[] = $channel;
-
-            return;
-        }
-        
-        throw (new SpecificationException)->exception($channel);
+        $this->channels[] = $channel;
     }
 
     /**
@@ -47,7 +35,7 @@ class ChannelManager extends Manager
      */
     protected function createDriver($driver)
     {
-        if ($channel = $this->channelCreate($driver)) {
+        if ($channel = $this->createChannel($driver)) {
             return $channel;
         }
 
@@ -60,9 +48,11 @@ class ChannelManager extends Manager
      * @param  string  $driver
      * @return mixed
      */
-    protected function channelCreate($driver)
+    protected function createChannel($driver)
     {
         foreach ($this->getChannels() as $channel) {
+            $channel = $this->validateChannelFactory($channel);
+
             if ($channel::canHandleNotification($driver)) {
                 return $channel::createDriver($driver);
             }
@@ -78,17 +68,23 @@ class ChannelManager extends Manager
      */
     public function getChannels()
     {
-        return $this->channels;
+        return $this->channels = array_unique($this->channels);
     }
 
     /**
-     * Check if a given channel is registered.
+     * Validate channel factory.
      * 
-     * @param  string  $channel 
-     * @return boolean
+     * @param  string $channel
+     * @return string
+     *
+     * @throws  SpecificationException
      */
-    protected function isRegistered($channel)
+    protected function validateChannelFactory($channel)
     {
-        return array_search($channel, $this->channels) !== false;
+        if ((new FactorySpecification)->isSatisfiedBy($channel)) {
+            return $channel;
+        }
+        
+        throw (new SpecificationException)->exception($channel);
     }
 }

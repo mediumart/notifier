@@ -68,7 +68,7 @@ class NotifierChannelCommand extends GeneratorCommand
 
     /**
      * Replace Hooks Aliases for the given stub.
-     * 
+     *
      * @param  string $stub
      * @param  string $aliases
      * @return string

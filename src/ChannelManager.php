@@ -15,7 +15,7 @@ class ChannelManager extends Manager
     protected $channels = [];
 
     /**
-     * Register a new channel driver.
+     * Register a new channel factory.
      *
      * @param  string  $channel
      * @return void
@@ -51,7 +51,9 @@ class ChannelManager extends Manager
     protected function createChannel($driver)
     {
         foreach ($this->getChannels() as $channel) {
-            $channel = $this->validateChannelFactory($channel);
+            if (! (new FactorySpecification)->isSatisfiedBy($channel)) {
+                throw (new SpecificationException)->exception($channel);
+            }
 
             if ($channel::canHandleNotification($driver)) {
                 return $channel::createDriver($driver);
@@ -69,22 +71,5 @@ class ChannelManager extends Manager
     public function getChannels()
     {
         return $this->channels = array_unique($this->channels);
-    }
-
-    /**
-     * Validate channel factory.
-     * 
-     * @param  string $channel
-     * @return string
-     *
-     * @throws  SpecificationException
-     */
-    protected function validateChannelFactory($channel)
-    {
-        if ((new FactorySpecification)->isSatisfiedBy($channel)) {
-            return $channel;
-        }
-        
-        throw (new SpecificationException)->exception($channel);
     }
 }

@@ -19,7 +19,7 @@
         "orchestra/testbench": "~3.4",
         "phpunit/phpunit": "^5.7",
         "mockery/mockery": "^0.9.9",
-        "mikey179/vfsStream": "^1.6"
+        "mikey179/vfsstream": "^1.6"
     },
     "autoload": {
         "psr-4": {
